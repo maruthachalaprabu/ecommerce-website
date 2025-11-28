@@ -1,0 +1,43 @@
+﻿{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+{% if category %}{{ category.name }}{% else %}Products{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>{% if category %}{{ category.name }}{% else %}All Products{% endif %}</h1>
+</div>
+
+<div style="display: flex;">
+    <aside style="width: 200px; padding-right: 20px;">
+        <h3>Categories</h3>
+        <ul>
+            <li {% if not category %}class="selected" {% endif %}>
+                <a href="{% url "store:product_list" %}">All</a>
+            </li>
+            {% for c in categories %}
+                    <li {% if category.slug == c.slug %}class="selected"{% endif %}>
+                <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </aside>
+
+    <div class="product-grid" style="flex: 1;">
+        {% for product in products %}
+        <div class="product-card">
+            <a href="{{ product.get_absolute_url }}">
+                <img class="product-image" src="{% if product.image %}{{ product.image.url }}{% else %}{% static "
+                    img/no_image.png" %}{% endif %}" alt="{{ product.name }}">
+            </a>
+            <div class="product-title">
+                <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+            </div>
+            <div class="product-price">&#8377;{{ product.price }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

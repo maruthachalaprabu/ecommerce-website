@@ -1,0 +1,28 @@
+﻿{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+{{ product.name }}
+{% endblock %}
+
+{% block content %}
+<div class="product-detail" style="display: flex; gap: 2rem; padding: 2rem; background: white; margin-top: 1rem;">
+    <div style="flex: 1;">
+        <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static " img/no_image.png" %}{% endif %}"
+            alt="{{ product.name }}" style="width: 100%; max-width: 400px;">
+    </div>
+    <div style="flex: 1;">
+        <h1 style="font-size: 2rem; margin-bottom: 1rem;">{{ product.name }}</h1>
+        <p style="color: #878787; margin-bottom: 1rem;">
+            <a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a>
+        </p>
+        <p style="font-size: 2rem; font-weight: bold; margin-bottom: 1rem;">&#8377;{{ product.price }}</p>
+        <p style="margin-bottom: 2rem;">{{ product.description|linebreaks }}</p>
+
+        <form action="{% url 'cart:add_to_cart' product.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn" style="padding: 1rem 2rem; font-size: 1.2rem;">Add to Cart</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
